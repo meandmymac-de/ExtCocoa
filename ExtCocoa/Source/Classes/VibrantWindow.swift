@@ -46,45 +46,106 @@ open class VibrantWindow: NSWindow {
     /**
      @brief Returns true if the window is currently in full-screen.
      */
-    @objc dynamic var isFullScreen: Bool {
+    @objc public dynamic var isFullScreen: Bool {
         return
             (self.styleMask.rawValue & NSWindow.StyleMask.fullScreen.rawValue) ==
                 NSWindow.StyleMask.fullScreen.rawValue
     }
     
-    /*- (void) setContentViewAppearanceVibrantDark {
-    [self setContentViewAppearance:NSVisualEffectMaterialDark];
-    }*/
-    
-    /*- (void) setContentViewAppearanceVibrantLight {
-    [self setContentViewAppearance:NSVisualEffectMaterialLight];
+    @IBInspectable @objc public dynamic var contentViewVibrantDarkAppearance: Bool = false {
+        didSet {
+            if contentViewVibrantDarkAppearance {
+                setContentViewMaterial(.dark)
+                contentViewVibrantLightAppearance = false
+            }
+        }
     }
     
-    - (void) setContentViewAppearance: (int) material {
-    if (![WAYWindow supportsVibrantAppearances])
-    return;
-    
-    NSVisualEffectView *newContentView = (NSVisualEffectView *)[self replaceSubview:self.contentView withViewOfClass:[NSVisualEffectView class]];
-    [newContentView setMaterial:material];
-    [self setContentView:newContentView];
+    @IBInspectable @objc public dynamic var contentViewVibrantLightAppearance: Bool = false {
+        didSet {
+            if contentViewVibrantDarkAppearance {
+                setContentViewMaterial(.light)
+                contentViewVibrantDarkAppearance = false
+            }
+        }
     }
     
-    - (void) setVibrantDarkAppearance {
-    [self setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameVibrantDark]];
+    @IBInspectable @objc public dynamic var vibrantDarkAppearance: Bool = false {
+        didSet {
+            if vibrantDarkAppearance {
+                appearance = NSAppearance(named: .vibrantDark)
+                vibrantLightAppearance = false
+                aquaAppearance = false
+            }
+        }
     }
     
-    - (void) setVibrantLightAppearance {
-    [self setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameVibrantLight]];
+    @IBInspectable @objc public dynamic var vibrantLightAppearance: Bool = false {
+        didSet {
+            if vibrantLightAppearance {
+                appearance = NSAppearance(named: .vibrantLight)
+                vibrantDarkAppearance = false
+                aquaAppearance = false
+            }
+        }
     }
     
-    - (void) setAquaAppearance {
-    [self setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
-    }*/
+    @IBInspectable @objc public dynamic var aquaAppearance: Bool = true {
+        didSet {
+            if aquaAppearance {
+                appearance = NSAppearance(named: .aqua)
+                vibrantLightAppearance = false
+                vibrantDarkAppearance = false
+            }
+        }
+    }
+    
+    
+    // MARK: - Initialization
+    
+    public override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask,
+                         backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
+        super.init(contentRect: contentRect, styleMask: style, backing: backingStoreType,
+                   defer: flag)
+    }
+    
     
     // MARK: - Public Methods
     
-    open func replaceSubview(_ view: NSView?, withViewOfClass: NSView.Type) -> NSView? {
+    open func replaceSubview(_ view: NSView, withViewOfClass viewClass: NSView.Type) -> NSView? {
+        let newView = viewClass.init(frame: view.frame)
         
+        replaceSubview(view, withView: newView)
+        return newView
+    }
+    
+    open func replaceSubview(_ view: NSView, withView newView: NSView, resizing: Bool = true) {
+        let constraints = view.constraints
+        
+        if resizing {
+            newView.frame = view.frame
+        }
+        
+        newView.autoresizesSubviews = view.autoresizesSubviews
+        
+        view.subviews.forEach { subview in
+            let frame = subview.frame
+            
+            subview.removeFromSuperview()
+            newView.addSubview(subview)
+            subview.frame = frame
+        }
+        
+        constraints.forEach(newView.addConstraint)
+        
+        if view.isEqual(to: contentView) {
+            contentView = newView
+        }
+        else {
+            view.superview?.replaceSubview(view, with: newView)
+        }
+        
+        self.contentView?.layout()
     }
     
     // MARK: - Private Methods
@@ -94,7 +155,8 @@ open class VibrantWindow: NSWindow {
             return
         }
         
-        let newContentView = replaceSubview(contentView, withViewOfClass: NSVisualEffectView.self) as! NSVisualEffectView
+        let newContentView = replaceSubview(contentView!,
+                                 withViewOfClass: NSVisualEffectView.self) as! NSVisualEffectView
         
         newContentView.material = material
         contentView = newContentView
