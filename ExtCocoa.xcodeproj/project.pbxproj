@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		E92D995B2006A8EF0087B9CD /* ExtCocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = E92D99592006A8EF0087B9CD /* ExtCocoa.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E92D99642006A9AF0087B9CD /* VibrantWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92D99632006A9AF0087B9CD /* VibrantWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E92D99562006A8EF0087B9CD /* ExtCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ExtCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E92D99592006A8EF0087B9CD /* ExtCocoa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtCocoa.h; sourceTree = "<group>"; };
 		E92D995A2006A8EF0087B9CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E92D99632006A9AF0087B9CD /* VibrantWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrantWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,10 +48,27 @@
 		E92D99582006A8EF0087B9CD /* ExtCocoa */ = {
 			isa = PBXGroup;
 			children = (
+				E92D99612006A94E0087B9CD /* Source */,
 				E92D99592006A8EF0087B9CD /* ExtCocoa.h */,
 				E92D995A2006A8EF0087B9CD /* Info.plist */,
 			);
 			path = ExtCocoa;
+			sourceTree = "<group>";
+		};
+		E92D99612006A94E0087B9CD /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				E92D99622006A94E0087B9CD /* Classes */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		E92D99622006A94E0087B9CD /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				E92D99632006A9AF0087B9CD /* VibrantWindow.swift */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,6 +114,7 @@
 				TargetAttributes = {
 					E92D99552006A8EF0087B9CD = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -131,6 +151,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E92D99642006A9AF0087B9CD /* VibrantWindow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +273,7 @@
 		E92D995F2006A8EF0087B9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -266,6 +288,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.meandmymac.ExtCocoa;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -273,6 +296,7 @@
 		E92D99602006A8EF0087B9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
